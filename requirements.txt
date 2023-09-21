@@ -4,4 +4,6 @@ seaborn
 CatBoost
 matplotlib
 xgboost
+pickle
+dill
 # -e .
