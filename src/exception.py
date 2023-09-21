@@ -1,6 +1,5 @@
-import sys, os
-import logging
-from src import exception
+import os
+import sys
 
 def error_message_detail(error, error_detail:sys):
     exc_type, exc_obj, exc_tb = error_detail.exc_info()
