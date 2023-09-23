@@ -4,14 +4,15 @@ from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
-from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder,StandardScaler
 
+from src.logger import logging
 from src.utils import save_object
 from src.exception import CustomException
-from src.logger import logging
+
 
 @dataclass
 class DataTransformationConfig:
@@ -23,26 +24,23 @@ class DataTransformation:
     
     def get_data_transformer_obj(self):
         """ This function is resonsible for data transformation """
-
         try:
             num_features=['reading_score', 'writing_score']
             cat_features=['gender', 'race_ethnicity', 'parental_level_of_education', 'lunch', 'test_preparation_course']
             
-            num_pipeline=([
+            num_pipeline = Pipeline([
                 ("impute", SimpleImputer(strategy="median")),
                 ("standardize", StandardScaler()),
             ])
-            cat_pipeline=Pipeline([
-                ("impute", SimpleImputer(strategy="most_freqeunt")),
-                ("standardize",StandardScaler()),
+
+            cat_pipeline = Pipeline([
+                ("impute", SimpleImputer(strategy="most_frequent")),
                 ("encode", OneHotEncoder()),
             ])
-            logging.info("Numerical Columns standard scaling completed")
-            logging.info("Categorical Columns standard scaling complete")
 
-            preprocessing=ColumnTransformer([
-                ("num",num_pipeline,num_features),
-                ("cat",cat_pipeline,cat_features)
+            preprocessing = ColumnTransformer([
+                ("num", num_pipeline, num_features),
+                ("cat", cat_pipeline, cat_features)
             ])
             return preprocessing
         except Exception as e:
@@ -59,12 +57,11 @@ class DataTransformation:
             preprocessing_obj=self.get_data_transformer_obj()
 
             target_col="math_score"
-            num_col=['reading_score', 'writing_score']
 
-            input_feature_train_df=train_df.drop(columns=[target_col],axis=1)
+            input_feature_train_df=train_df.drop(target_col,axis=1)
             target_feature_train_df=train_df[target_col]
 
-            input_feature_test_df=test_df.drop(columns=[target_col],axis=1)
+            input_feature_test_df=test_df.drop(target_col,axis=1)
             target_feature_test_df=test_df[target_col]
 
             logging.info(f"Applying preprocessing object on training dataframe and testing dataframe.")
