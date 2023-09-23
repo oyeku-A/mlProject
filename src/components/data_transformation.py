@@ -1,5 +1,6 @@
 import os
 import sys
+import dill
 from dataclasses import dataclass
 
 import numpy as np
@@ -76,13 +77,14 @@ class DataTransformation:
 
             save_object(
                 file_path=self.data_transformation_config.preprocessor_obj_file_path,
-                obj=preprocessing_obj
+                obj=preprocessing_obj,
+                type=dill
                 )
 
             return (
                 train_arr,
                 test_arr,
-                self.data_transformation_config.preprocessor_obj_file_path,
+                # self.data_transformation_config.preprocessor_obj_file_path,
             )
         except Exception as e:
             raise CustomException(e,sys)

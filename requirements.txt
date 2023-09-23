@@ -4,6 +4,6 @@ seaborn
 CatBoost
 matplotlib
 xgboost
-pickle
 dill
+joblib
 # -e .
