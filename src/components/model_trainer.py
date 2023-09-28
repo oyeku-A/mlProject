@@ -74,17 +74,21 @@ class ModelTrainer:
                     'n_estimators': [8,16,32,64,128,256]
                 }
             }
-
             model_report=model_evaluation(X_train,y_train,X_test,y_test,models,parameters=params)
-            best_score,best_model=get_best_model(model_report,models=models)
+            best_model_info=get_best_model(model_report)
+            model = best_model_info['model']
+            model_r2_score=best_model_info['r2_score']
+            model.set_params(**best_model_info['parameters'])
+            model.fit(X_train, y_train)
+
             logging.info("Model performing best on train and test set found")
 
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,
-                obj=best_model,
+                obj=model,
                 type=joblib
             )
-            print(best_score)
+            # print(model_r2_score)
         except Exception as e:
             raise CustomException(e,sys)
      
