@@ -91,10 +91,3 @@ class ModelTrainer:
             # print(model_r2_score)
         except Exception as e:
             raise CustomException(e,sys)
-     
-
-if __name__=='__main__':
-    trans=data_transformation.DataTransformation()
-    a, b = trans.initiate_data_transformation('G:\\Users\\USER\\Desktop\\AdultCensus_\\mlProject\\artifacts\\train.csv','G:\\Users\\USER\\Desktop\\AdultCensus_\\mlProject\\artifacts\\test.csv')
-    train_=ModelTrainer()
-    train_.initiate_model_trainer(a, b)

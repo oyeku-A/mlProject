@@ -1,6 +1,7 @@
 import os
 import sys
 import dill
+import joblib
 
 import numpy as np
 import pandas as pd
@@ -20,8 +21,16 @@ def save_object(file_path, obj, type):
 
     except Exception as e:
         raise CustomException(e, sys)
+      
+      
+def load_object(file_path,type):
+    try:
+        with open(file_path, 'rb') as file_obj:
+            return joblib.load(file_obj)
+    except Exception as e:
+        raise CustomException(e,sys)    
 
-    
+
 def model_evaluation(X_train,y_train,X_test,y_test,models,parameters:dict)->dict:
     try:
         report={}
